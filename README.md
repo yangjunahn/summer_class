@@ -65,83 +65,80 @@
 
 ---
 
-## 01차: 딥러닝 서버 활용 방법과 파이토치 신경망 모델 기본 구성 만들기
+### VS Code에서 원격 Ubuntu 서버(SSH) 연결 및 폴더 열기 방법
 
-### 강의자: 고원준 | 8월18일(월) 10:00~12:00
+#### 1. VS Code에 Remote-SSH 확장 설치
+1. VS Code를 엽니다.
+2. 왼쪽 사이드바에서 **Extensions (확장)** 아이콘 클릭.
+3. **“Remote - SSH”** 검색 후 설치.
+   - Microsoft에서 만든 확장인지 확인하세요.
 
-### 1. 딥러닝 서버 접속 방법
+#### 2. SSH 설정 파일 작성
+1. VS Code 명령 팔레트 열기:  
+    **`Ctrl + Shift + P`** (Windows)  
+    **`Cmd + Shift + P`** (Mac)
+2. **`Remote-SSH: Open SSH Configuration File...`** 선택.
+3. 기본 경로(`~/.ssh/config`) 선택.
+4. 아래 내용 추가:
+   ```ssh
+   Host my-ubuntu-server
+       HostName 210.125.91.90
+       Port 22
+       User ai_thu
 
-#### SSH 클라이언트를 이용한 접속
+    금요일에는 User 를 ai_fri 로 변경합니다. 
 
-**Windows 사용자 (PuTTY)**
+#### 3. 서버 접속
+1. VS Code 명령 팔레트 열기:  
+   - **Mac:** `Cmd + Shift + P`  
+   - **Windows:** `Ctrl + Shift + P`  
+2. **`Remote-SSH: Connect to Host...`** 선택.
+3. 방금 설정한 **`my-ubuntu-server`** 선택.
+4. 연결 시 암호 입력
 
-1. PuTTY 실행
-2. Host Name: `210.125.91.90`
-3. Port: `22`
-4. Connection type: SSH
-5. Open 클릭
-6. 사용자명: `yangjunahn`
-7. 비밀번호: `0000`
 
-**Mac/Linux 사용자**
+#### 4. 서버 폴더 열기
+1. 연결이 완료되면 VS Code가 **원격 서버 환경**에서 새 창을 엽니다.
+2. 상단 메뉴에서 **File → Open Folder...** 클릭.  
+   - **Mac 단축키:** `Cmd + K` → `O`  
+   - **Windows 단축키:** `Ctrl + K` → `O`  
+3. `/home/ai_thu` 폴더 선택 후 **Open**.
 
-```bash
-ssh yangjunahn@210.125.91.90
-```
+#### 5. 가상환경 활성화
+1. 생성 방법:
 
-#### Visual Studio Code를 이용한 접속
+    **터미널**
+    ```ssh
+        python3 -m venv myenv
+    
+2. 활성화 방법:
 
-1. VSCode 실행
-2. `Ctrl+Shift+P` (또는 `Cmd+Shift+P`) - Command Palette 열기
-3. `Remote-SSH: Connect to Host` 선택
-4. `yangjunahn@210.125.91.90` 입력
-5. 비밀번호 `0000` 입력
+    **터미널**
+    ```ssh
+        source myenv/bin/activate
 
-### 2. 서버 환경 설정
+#### 6. 서버 환경 설정
 
-#### 작업 디렉토리 생성
-
-```bash
-mkdir -p ~/pytorch_tutorial
-cd ~/pytorch_tutorial
-```
-
-#### Python 가상환경 설정
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-#### PyTorch 설치 확인
+##### PyTorch 설치 확인
 
 ```bash
 python -c "import torch; print(torch.__version__)"
 python -c "import torch; print(torch.cuda.is_available())"
 ```
 
-### 3. GPU 할당 및 사용 방법
+##### 7. GPU 할당 및 사용 방법
 
-#### GPU 상태 확인
+###### GPU 상태 확인
 
 ```bash
 nvidia-smi
 ```
 
-#### GPU 할당 방법
+###### GPU 할당 방법
 
-학생들은 다음과 같이 GPU를 할당받아 사용합니다:
+네명의 학생 당 하나의 GPU를 할당받아 사용합니다:
 
-- 학생 1-2: GPU 0번
-- 학생 3-4: GPU 1번
-- 학생 5-6: GPU 2번
-- 학생 7-8: GPU 3번
-- 학생 9-10: GPU 4번
-- 학생 11-12: GPU 5번
-- 학생 13-14: GPU 6번
-- 학생 15-16: GPU 7번
-
-#### 코드에서 GPU 지정
+###### 코드에서 GPU 지정
 
 ```python
 import torch
@@ -152,6 +149,15 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"사용 중인 장치: {device}")
 ```
+
+###### 라이브러리 설치하기
+
+pip install -r requirements.txt
+
+
+## 01차: 딥러닝 서버 활용 방법과 파이토치 신경망 모델 기본 구성 만들기
+
+### 강의자: 고원준 | 8월18일(월) 10:00~12:00
 
 ### 4. 파이토치 기본 익히기
 
